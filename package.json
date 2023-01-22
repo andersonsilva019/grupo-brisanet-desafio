@@ -11,6 +11,7 @@
   "dependencies": {
     "@stitches/react": "^1.2.8",
     "@tanstack/react-query": "^4.22.3",
+    "@tanstack/react-query-devtools": "^4.22.4",
     "axios": "^1.2.3",
     "md5": "^2.3.0",
     "react": "^18.2.0",
