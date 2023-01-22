@@ -1,19 +1,18 @@
-import { Box } from "../Box";
+import { Box, BoxProps } from "../Box";
 import * as S from "./styles";
 
-type ComicProps = {
-  id: number;
+interface ComicProps extends BoxProps {
   title: string;
   imageUrl: string;
-  creators: string[]
+  creators: string;
 }
 
-export function Comic({ id, title, creators, imageUrl }: ComicProps){
+export function Comic({  title, creators, imageUrl, ...props }: ComicProps){
   return (
-    <Box>
+    <Box {...props}>
       <img width={220} height={320} src={imageUrl}/>
       <S.ComicTitle>{title}</S.ComicTitle>
-      <S.ComicCreators>{creators.slice(0,2).join(', ')}</S.ComicCreators>
+      <S.ComicCreators>{creators}</S.ComicCreators>
     </Box>
   )
 }
