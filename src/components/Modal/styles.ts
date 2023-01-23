@@ -1,5 +1,28 @@
-import { styled } from '../../styles'
+import { styled, keyframes } from '../../styles'
 import { Box } from '../Box'
+
+const modalIn = keyframes({
+  from: {
+    opacity: 0,
+    transform: 'translateY(-50px)',
+  },
+  to: {
+    opacity: 1,
+    transform: 'translateY(0)',
+  },
+})
+
+const modalOut = keyframes({
+  from: {
+    opacity: 1,
+    transform: 'translateY(0)',
+  },
+  to: {
+    opacity: 0,
+    transform: 'translateY(-50px)',
+  },
+})
+
 
 export const ModalContainer = styled('div', {
   position: 'fixed',
@@ -7,19 +30,19 @@ export const ModalContainer = styled('div', {
   height: '100%',
   top: 0,
   left: 0,
+  zIndex: 100,
 
-
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  
   variants: {
     isOpen: {
       true: {
-        opacity: 1,
-        'pointer-events': 'auto',
-        transform: 'translateY(0)',
+        animation: `${modalIn} 200ms ease-in`,
       },
       false: {
-        opacity: 0,
-        'pointer-events': 'none',
-        transform: 'translateY(100%)',
+        animation: `${modalOut} 200ms ease-out`,
       }
     }
   }
@@ -64,9 +87,9 @@ export const CloseButton = styled('button', {
 })
 
 export const Content = styled(Box, {
-  position: 'relative',
-  top: '50%',
-  transform: 'translateY(-50%)',
+  // position: 'relative',
+  // top: '50%',
+  // transform: 'translateY(-50%)',
 
   display: 'flex',
   flexDirection: 'column',
@@ -74,11 +97,40 @@ export const Content = styled(Box, {
   justifyContent: 'center',
   zIndex: 100,
 
-  maxWidth: 800,
+  maxWidth: 1100,
   width: '100%',
   paddingBottom: '2rem',
 
   margin: '0 auto',
+
+  footer: {
+    width: '100%',
+    marginTop: '1rem',
+    borderTop: '2px solid $gray-500',
+    padding: '1rem 0 0',
+    display: 'flex',
+    justifyContent: 'flex-end',
+
+    a: {
+      all: 'unset',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      fontSize: '1rem',
+      fontWeight: 700,
+      color: '$white',
+      backgroundColor: '$green-500',
+      padding: '1rem',
+      borderRadius: '6px',
+
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+
+      '&:hover': {
+        filter: 'brightness(0.9)'
+      }
+    }
+  }
 })
 
 export const Main = styled('main', {
