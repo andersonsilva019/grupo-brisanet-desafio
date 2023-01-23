@@ -1,6 +1,7 @@
 import axios from 'axios'
 import md5 from 'md5'
 import { useQuery } from '@tanstack/react-query'
+import type { Comic, ComicDetails } from '../../types'
 
 const apiKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY
 
@@ -12,44 +13,6 @@ const http = axios.create({
   baseURL: `https://gateway.marvel.com/v1/public`,
 })
 
-export interface UseComicsReturnTypeData {
-  data: {
-    results: {
-      id: number
-      title: string
-      description: string
-      creators: {
-        items:{
-          name: string
-          role: string
-        }
-      }
-      thumbnail: {
-        path: string
-        extension: string
-      }
-    }[]
-  }
-}
-
-interface Comic {
-  id: number
-  title: string
-  description: string
-  creators: string
-  imageUrl: string
-}
-
-interface ComicDetails {
-  id: number
-  title: string
-  description: string
-  creators: {
-    name: string
-    role: string
-  }[]
-  imageUrl: string
-}
 
 const getComics = async () => { 
   const response = await http.get(`/comics?ts=${timestamp}&apikey=${apiKey}&hash=${hash}`)
