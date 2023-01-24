@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy-preview:
-    name: Build app
+    name: Preview app
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -43,7 +43,7 @@ jobs:
           NETLIFY_DEPLOY_TO_PROD: true
 
       - name: create or update comment
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
