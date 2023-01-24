@@ -33,7 +33,7 @@ jobs:
         uses: jsmrcaga/action-netlify-deploy@master
         with:
           build_command: npm run build
-          build_directory: dist
+          build_directory: /dist
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_DEPLOY_MESSAGE: "Deployed from GitHub action"
