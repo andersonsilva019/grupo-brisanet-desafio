@@ -3,7 +3,6 @@ import { keyframes, styled } from "../../styles";
 
 export const Container = styled(Box, {
   width: '100%',
-  height: '100%',
   maxWidth: '300px',
   maxHeight: '710px',
   overflowY: 'auto',

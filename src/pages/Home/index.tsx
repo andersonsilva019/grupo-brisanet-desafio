@@ -20,6 +20,11 @@ export function Home() {
 
   function handlePageChange(page: number) {
     setCurrentPage(page)
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
 
   return (
