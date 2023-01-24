@@ -9,3 +9,5 @@
 * Para fazer a estilização, utilizei o `stitches`. Uma das mais famosas libs Css-in-JS. 
 
 * Para fazer o roteamento, utilizei o `react-router-dom` na sua última versão.
+
+* Utilizei o Github Actions para fazer o deploy da aplicação no Netlify.
