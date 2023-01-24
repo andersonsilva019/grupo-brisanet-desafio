@@ -23,12 +23,7 @@ jobs:
 
       - name: Build app
         run: npm run build
-  
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
+
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@master
         with:
@@ -41,3 +36,4 @@ jobs:
 
       - name: Get live URL
         run: "echo $NETLIFY_LIVE_URL"
+
