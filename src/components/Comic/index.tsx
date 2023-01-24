@@ -7,10 +7,12 @@ interface ComicProps extends BoxProps {
   creators: string;
 }
 
-export function Comic({  title, creators, imageUrl, ...props }: ComicProps){
+export function Comic({ title, creators, imageUrl, ...props }: ComicProps) {
   return (
     <Box {...props}>
-      <img width={220} height={320} src={imageUrl}/>
+      <S.ImageBox>
+        <img width={220} height={320} src={imageUrl} />
+      </S.ImageBox>
       <S.ComicTitle>{title}</S.ComicTitle>
       <S.ComicCreators>{creators}</S.ComicCreators>
     </Box>
