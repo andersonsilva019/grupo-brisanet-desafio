@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     name: Build app
     runs-on: ubuntu-latest
     steps:
@@ -23,11 +23,7 @@ jobs:
 
       - name: Build app
         run: npm run build
-  
-  deploy:
-    name: Deploy
-    needs: build
-    steps:
+
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@master
         with:
