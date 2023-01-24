@@ -14,22 +14,28 @@ const http = axios.create({
 })
 
 
-const getComics = async () => { 
-  const response = await http.get(`/comics?ts=${timestamp}&apikey=${apiKey}&hash=${hash}`)
-  
-  const comics = response.data.data.results.map((comic: any) => ({
+const getComics = async (page: number) => {
+
+  const offset = page === 1 ? 0 : (page - 1) * 20
+
+  const response = await http.get(`/comics?offset=${offset}&ts=${timestamp}&apikey=${apiKey}&hash=${hash}`)
+
+  const comics: Omit<Comic, 'description'>[] = response.data.data.results.map((comic: any) => ({
     id: comic.id,
     title: comic.title,
     creators: comic.creators.items.map((creator: any) => creator.name).join(', '),
     imageUrl: `${comic.thumbnail.path}.${comic.thumbnail.extension}`
   }))
 
-  return comics as Omit<Comic, 'description'>[]
+  return {
+    comics,
+    totalOfComics: response.data.data.total as number
+  }
 }
 
 const getComicById = async (id: number) => {
   const response = await http.get(`/comics/${id}?ts=${timestamp}&apikey=${apiKey}&hash=${hash}`)
-  
+
   const comic = response.data.data.results.map((comic: any) => ({
     id: comic.id,
     title: comic.title,
@@ -38,18 +44,20 @@ const getComicById = async (id: number) => {
       name: creator.name,
       role: creator.role
     })),
-    imageUrl: `${comic.thumbnail.path}.${comic.thumbnail.extension}`
+    imageUrl: `${comic.thumbnail.path}.${comic.thumbnail.extension}`,
   }))
 
   return comic as ComicDetails[]
 }
 
-export function useComics(){
+export function useComics({ page = 0 }: { page?: number }) {
   return useQuery({
-    queryKey: ['comics'],
-    queryFn: getComics,
-    staleTime: 1000 * 60 * 60 * 24, // 24 hours 
+    queryKey: ['comics', page],
+    queryFn: () => getComics(page),
+    staleTime: 1000 * 60 * 60 * 1, // 1 hour 
+    cacheTime: 1000 * 60 * 60 * 12, // 12 hours
     refetchOnWindowFocus: false,
+    keepPreviousData: true,
   })
 }
 
@@ -58,12 +66,13 @@ type UseComicParams = {
   condition?: boolean
 }
 
-export function useComic({ id, condition = true }: UseComicParams){
+export function useComic({ id, condition = true }: UseComicParams) {
   return useQuery({
     queryKey: ['comic', id],
     queryFn: async () => getComicById(id),
     enabled: condition,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 60 * 24, // 24 hours 
+    staleTime: 1000 * 60 * 60 * 1, // 1 hour 
+    cacheTime: 1000 * 60 * 60 * 12, // 12 hours
   })
 }
