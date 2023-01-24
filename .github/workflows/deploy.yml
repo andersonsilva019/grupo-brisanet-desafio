@@ -23,12 +23,16 @@ jobs:
 
       - name: Build app
         run: npm run build
-
+  
+  deploy:
+    name: Deploy
+    needs: build
+    steps:
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@master
         with:
           build_command: npm run build
-          build_directory: /dist
+          build_directory: dist
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_DEPLOY_MESSAGE: "Deployed from GitHub action"
@@ -36,4 +40,3 @@ jobs:
 
       - name: Get live URL
         run: "echo $NETLIFY_LIVE_URL"
-
