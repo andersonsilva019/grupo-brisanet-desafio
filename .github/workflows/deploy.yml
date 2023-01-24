@@ -23,6 +23,10 @@ jobs:
 
       - name: Build app
         run: npm run build
+        env:
+          VITE_MARVEL_PUBLIC_KEY=${{ secrets.VITE_MARVEL_PUBLIC_KEY }}
+          VITE_MARVEL_PRIVATE_KEY=${{ secrets.VITE_MARVEL_PRIVATE_KEY }}
+          VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
 
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@master
