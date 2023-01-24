@@ -38,8 +38,8 @@ export function Map({ saveAddressFromGoogleMaps }: MapProps) {
   
   return (
     <Wrapper apiKey={`${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`}>
-      <MapContainer 
-        zoom={11}
+      <MapContainer
+        zoom={3}
         position={position}
         updatePosition={updatePosition}
         saveAddress={saveAddress}
