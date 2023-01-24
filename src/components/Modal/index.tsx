@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useComic } from '../../services/marvelApi/marvelApiSerivices'
 import * as S from './styles'
@@ -21,9 +21,29 @@ export function Modal({ trigger, comicId }: ModalProps) {
     setIsOpen(true)
   }
 
-  function closeModal() {
+  const closeModal = useCallback(() => {
     setIsOpen(false)
-  }
+  }, [])
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    function handleKeyUp(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        closeModal()
+      }
+    }
+
+    window.addEventListener('keyup', handleKeyUp)
+
+    return () => window.removeEventListener('keyup', handleKeyUp)
+  }, [closeModal])
 
   return (
     <>
