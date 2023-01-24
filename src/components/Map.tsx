@@ -1,4 +1,4 @@
-import {  useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Wrapper } from '@googlemaps/react-wrapper'
 import { Marker } from "./Marker";
 import { MapContainer } from "./MapContainer";
@@ -23,19 +23,19 @@ export function Map({ saveAddressFromGoogleMaps }: MapProps) {
         });
       })
     }
-  },[])
+  }, [])
 
-  function updatePosition(lat: number, lng: number) {
+  const updatePosition = useCallback((lat: number, lng: number) => {
     setPosition({
       lat,
       lng
     });
-  }
+  }, [])
 
-  function saveAddress(address: string) {
+  const saveAddress = useCallback((address: string) => {
     saveAddressFromGoogleMaps(address)
-  }
-  
+  }, [])
+
   return (
     <Wrapper apiKey={`${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`}>
       <MapContainer

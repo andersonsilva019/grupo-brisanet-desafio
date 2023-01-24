@@ -1,21 +1,19 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 
 interface MapContainerProps extends google.maps.MapOptions {
   onClick?: (e: google.maps.MapMouseEvent) => void;
   updatePosition: (lat: number, lng: number) => void;
-  onIdle?: (map: google.maps.Map) => void;
   children: React.ReactNode;
   position: google.maps.LatLngLiteral;
   saveAddress: (address: string) => void;
 }
 
-export function MapContainer({ zoom, position, children, onIdle, updatePosition, saveAddress }: MapContainerProps) {
+export function MapContainer({ zoom, position, children, updatePosition, saveAddress }: MapContainerProps) {
 
   const ref = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
 
-  async function onClick(event: google.maps.MapMouseEvent) {
-
+  const onClick = useCallback(async (event: google.maps.MapMouseEvent) => {
     try {
 
       const geocoder = new google.maps.Geocoder();
@@ -25,7 +23,7 @@ export function MapContainer({ zoom, position, children, onIdle, updatePosition,
       const response = await geocoder.geocode({ location: { lat, lng } })
 
       if (response.results[0]) {
-        map?.setZoom(11);
+        map?.setZoom(18);
 
         const marker = new google.maps.Marker({
           position: { lat, lng },
@@ -45,7 +43,8 @@ export function MapContainer({ zoom, position, children, onIdle, updatePosition,
     } catch (error) {
       throw new Error("Geocoder failed due to: " + error);
     }
-  }
+
+  }, [map, updatePosition, saveAddress])
 
   useEffect(() => {
     if (map) {
@@ -53,7 +52,7 @@ export function MapContainer({ zoom, position, children, onIdle, updatePosition,
 
       map.addListener("click", onClick);
     }
-  }, [map, onClick, onIdle]);
+  }, [map, onClick]);
 
   useEffect(() => {
     if (ref.current && !map) {
@@ -63,7 +62,7 @@ export function MapContainer({ zoom, position, children, onIdle, updatePosition,
         mapTypeId: 'roadmap'
       }));
     }
-  }, [ref, map, position]);
+  }, [map, position]);
 
 
   return (
