@@ -1,0 +1,62 @@
+name: Preview to Netlify
+
+on: 
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy-preview:
+    name: Build app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+    
+      - name: Install dependencies
+        run: npm ci
+
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo VITE_MARVEL_PUBLIC_KEY=${{ secrets.VITE_MARVEL_PUBLIC_KEY }} >> .env
+          echo VITE_MARVEL_PRIVATE_KEY=${{ secrets.VITE_MARVEL_PRIVATE_KEY }} >> .env
+          echo VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }} >> .env
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy to Netlify
+        uses: jsmrcaga/action-netlify-deploy@master
+        id: deploy_preview
+        with:
+          build_command: npm run build
+          build_directory: dist
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_DEPLOY_MESSAGE: "Deployed from GitHub action"
+          NETLIFY_DEPLOY_TO_PROD: true
+
+      - name: find the comment
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Netlify Preview Deployment Information
+
+      - name: create or update comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Netlify Preview Deployment Information
+            - Log URL: ${{ steps.deploy_preview.outputs.NETLIFY_LOGS_URL }}
+            - Preview URL: ${{ steps.deploy_preview.outputs.NETLIFY_PREVIEW_URL }}
+          edit-mode: replace
